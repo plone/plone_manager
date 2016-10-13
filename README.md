@@ -1,38 +1,31 @@
-# electron-quick-start
+# plone-manager
 
-**Clone and run for a quick way to see an Electron in action.**
-
-This is a minimal Electron application based on the [Quick Start Guide](http://electron.atom.io/docs/latest/tutorial/quick-start) within the Electron documentation.
-
-**Use this app along with the [Electron API Demos](http://electron.atom.io/#get-started) app for API code examples to help you get started.**
-
-A basic Electron application needs just these files:
-
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
-
-You can learn more about each of these components within the [Quick Start Guide](http://electron.atom.io/docs/latest/tutorial/quick-start).
-
-## To Use
-
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+**Checkout and run to see plone-manager in action**
 
 ```bash
-# Clone this repository
-git clone https://github.com/electron/electron-quick-start
-# Go into the repository
-cd electron-quick-start
-# Install dependencies and run the app
-npm install && npm start
+# Clone the repo
+git clone https://github.com/plone/plone-manager
+# You can use npm if you want
+yarn install
+# You need electron on your machine (npm install -g electron)
+electron .
 ```
 
-Learn more about Electron and its API in the [documentation](http://electron.atom.io/docs/latest).
+**Use this app**
 
-## Other Example Apps
+This is an experiment to have a possible ZMI kind of tool to manage the content form a desktop app.
 
-For more example apps, see the
-[list of boilerplates](http://electron.atom.io/community/#boilerplates)
-created by the awesome electron community.
+ALERT : Nowadays only works on plone.server, planning to adapt to plone.restapi
+
+When the electron app is on you can set the settings for your plone site and save them.
+
+Then you have the option to browse the content, see the registry and the content types of the site
+
+**TODO**
+
+* Nicer UI
+* Schema angular 2 form to edit content
+* Edit registry
+* Support plone.restapi API
 
 #### License [CC0 1.0 (Public Domain)](LICENSE.md)
