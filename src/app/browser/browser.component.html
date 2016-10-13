@@ -1,0 +1,26 @@
+<md-card>
+   <md-card-title>Metadata</md-card-title>
+   <md-card-content *ngIf="result">
+     <md-grid-list cols="2" rowHeight="40px">
+        <md-grid-tile> Modified - {{result.modified}}</md-grid-tile>
+        <md-grid-tile> Created - {{result.created}}</md-grid-tile>
+        <md-grid-tile> Type - {{result['@type']}}</md-grid-tile>
+        <md-grid-tile> ID - {{result['id']}}</md-grid-tile>
+        <md-grid-tile> PATH - {{current_path}}</md-grid-tile>
+        <md-grid-tile> UID - {{result['UID']}}</md-grid-tile>
+        <md-grid-tile> @id - {{result['@id']}}</md-grid-tile>
+        <md-grid-tile (click)="load(result['parent']['@id'])"> parent - {{result['parent']['@id']}}</md-grid-tile>
+      </md-grid-list>
+   </md-card-content>
+ </md-card>
+<md-card>
+   <md-card-title>List of content</md-card-title>
+   <md-card-content>
+     <md-grid-list *ngIf="result" [cols]="fixedCols" [rowHeight]="fixedRowHeight">
+       <md-grid-tile *ngFor="let tile of result.items" colspan="4" rowspan="1"
+                     [style.background]="even ? 'lightblue' : 'lightgreen'" (click)="load(tile['@id'])">
+         {{tile['@id']}}
+       </md-grid-tile>
+     </md-grid-list>
+   </md-card-content>
+ </md-card>

@@ -1,0 +1,101 @@
+<md-card>
+  <md-card-title color="primary">Configuration</md-card-title>
+  <md-card-content>
+    <form  (ngSubmit)="onConfigSubmit()" #configForm="ngForm">
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select class="form-control" id="type" required
+              [(ngModel)]="config.config.type" name="type">
+          <option *ngFor="let p of types" [value]="p">{{p}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <md-checkbox class="form-control" [(ngModel)]="config.config.https" name="https"> HTTPS enabled </md-checkbox>
+      </div>
+      <div class="form-group">
+        <label for="ip">Server IP</label>
+        <md-input [(ngModel)]="config.config.ip" placeholder="Ex. 127.0.0.1" value="localhost" name="ip">IP</md-input>
+      </div>
+      <div class="form-group">
+        <label for="zodb">ZODB name</label>
+        <md-input [(ngModel)]="config.config.zodb" placeholder="Ex. zodb1" value="zodb1" name="zodb">ZODB</md-input>
+        <div *ngIf="sites">
+          <button md-button *ngFor="let site of sites.sites" (click)="setSite(site)">{{site}}</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="site">Site</label>
+        <md-input [(ngModel)]="config.config.site" placeholder="Ex. site" value="plone" name="site">Site</md-input>
+      </div>
+      <div class="form-group">
+        <label for="port">Port</label>
+        <md-input #port maxLength="5"
+                      [(ngModel)]="config.config.port"
+                      placeholder="Ex. 8080"
+                      name="port">
+          <md-hint align="end">{{port.characterCount}} / 5</md-hint>
+        </md-input>
+      </div>
+      <button md-button submit>Save</button>
+    </form>
+  </md-card-content>
+</md-card>
+<md-card>
+  <md-card-title color="primary">Create new site</md-card-title>
+  <md-card-content>
+    <form>
+      <div class="form-group">
+        <label for="new_site">Site title</label>
+        <md-input [(ngModel)]="site_to_create" placeholder="Ex. site" name="new_site">Site Title</md-input>
+        <label for="new_site_id">Site Id</label>
+        <md-input [(ngModel)]="site_to_create_id" placeholder="Ex. site id" name="new_site_id">Site Id</md-input>
+        {{message}}
+        <button md-button (click)="createNewSite()">Create new site</button>
+      </div>
+    </form>
+  </md-card-content>
+</md-card>
+<md-card>
+  <md-card-title color="primary">Authentication</md-card-title>
+  <md-card-content>
+    <form  (ngSubmit)="onAuthSubmit()" #authForm="ngForm">
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select class="form-control" id="type" required
+              [(ngModel)]="config.auth.type" name="type">
+          <option *ngFor="let p of auth_types" [value]="p">{{p}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <md-input [(ngModel)]="config.auth.jwt" placeholder="JWT bearer" name="jwt">JWT</md-input>
+      </div>
+      <div class="form-group">
+        <md-input [(ngModel)]="config.auth.token" placeholder="Basic token" name="token">Token</md-input>
+      </div>
+      <button md-button submit>Save</button>
+    </form>
+  </md-card-content>
+</md-card>
+<md-card>
+  <md-card-title color="primary">Get Token plone.oauth</md-card-title>
+  <md-card-content>
+    <form  (ngSubmit)="getOAuthToken()" #authForm="ngForm">
+      <div class="form-group">
+        <md-input [(ngModel)]="config.auth.oauth" placeholder="OAuth" name="oauth">OAuth URL</md-input>
+      </div>
+      <div class="form-group">
+        <md-input [(ngModel)]="config.auth.client_id" placeholder="Client ID" name="client_id">Client ID</md-input>
+      </div>
+      <div class="form-group">
+        <md-input [(ngModel)]="config.auth.scope" placeholder="Scope" name="scope">Scope</md-input>
+      </div>
+      <div class="form-group">
+        <md-input [(ngModel)]="config.auth.username" placeholder="Username" name="username">Username</md-input>
+      </div>
+      <div class="form-group">
+        <md-input [(ngModel)]="password" placeholder="Password" name="password">Password</md-input>
+      </div>
+      <button md-button submit>Get Token</button>
+    </form>
+  </md-card-content>
+</md-card>

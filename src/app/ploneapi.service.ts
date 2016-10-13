@@ -1,0 +1,86 @@
+import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
+import { ConfigurationService } from './configuration.service';
+
+const REGISTRY_ENDPOINT = '@registry';
+const TYPES_ENDPOINT = '@types';
+
+@Injectable()
+export class PloneapiService {
+
+  constructor(public http: Http, public config: ConfigurationService) { }
+
+  base_url() {
+    return this.config.getURL(this.config.config);
+  }
+
+  base_db_url() {
+    return this.config.getURL(this.config.config, true);
+  }
+
+  createAuthHeaders(headers: Headers) {
+    let auth_header = '';
+    if (this.config.auth.type === 'Basic') {
+      auth_header = 'Basic ' + this.config.auth.token;
+    }
+    if (this.config.auth.type === 'Bearer') {
+      auth_header = 'Bearer ' + this.config.auth.jwt;
+    }
+    if (auth_header) {
+      headers.append('Authorization', auth_header);
+    }
+    headers.append('Content-Type', 'application/json');
+  }
+
+  get(url) {
+    let headers = new Headers();
+    this.createAuthHeaders(headers);
+    return this.http.get(url, {
+      headers: headers
+    });
+  }
+
+  post(url, data) {
+    let headers = new Headers();
+    this.createAuthHeaders(headers);
+    return this.http.post(url, data, {
+      headers: headers
+    });
+  }
+
+  getObject(curr_path: string) {
+    let url = '';
+    if (curr_path.startsWith('http')) {
+      url = curr_path;
+    } else {
+      url = this.base_url() + curr_path;
+    }
+    return this.get(url);
+  }
+
+  getSites() {
+    let url = this.base_db_url();
+    return this.get(url);
+  }
+
+  createSite(name: string, id: string) {
+    let url = this.base_db_url();
+    let data = JSON.stringify({
+      '@type': 'Plone Site',
+      'title': name,
+      'id': id
+    });
+    return this.post(url, data);
+  }
+
+  getRegistry() {
+    let url = this.base_url() + '/' + REGISTRY_ENDPOINT;
+    return this.get(url);
+  }
+
+  getTypes() {
+    let url = this.base_url() + '/' + TYPES_ENDPOINT;
+    return this.get(url);
+  }
+
+}

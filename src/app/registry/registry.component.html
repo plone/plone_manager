@@ -1,0 +1,11 @@
+<md-card>
+   <md-card-title>Registry</md-card-title>
+   <md-card-content>
+     <md-grid-list *ngIf="result" cols="1" rowHeight="40px">
+       <md-grid-tile *ngFor="let tile of result | maptoiterable" colspan="1" rowspan="1"
+                     [style.background]="even ? 'lightblue' : 'lightgreen'">
+         {{tile.key}} - {{tile.value}}
+       </md-grid-tile>
+     </md-grid-list>
+   </md-card-content>
+ </md-card>
