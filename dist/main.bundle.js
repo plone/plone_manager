@@ -14295,6 +14295,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var REGISTRY_ENDPOINT = '@registry';
 var TYPES_ENDPOINT = '@types';
+var SHARING_ENTRYPOINT = '@sharing';
 var PloneapiService = (function () {
     function PloneapiService(http, config) {
         this.http = http;
@@ -14355,6 +14356,17 @@ var PloneapiService = (function () {
             'id': id
         });
         return this.post(url, data);
+    };
+    PloneapiService.prototype.getSharing = function (curr_path) {
+        var url = '';
+        if (curr_path.startsWith('http')) {
+            url = curr_path;
+        }
+        else {
+            url = this.base_url() + curr_path;
+        }
+        url = url + '/' + SHARING_ENTRYPOINT;
+        return this.get(url);
     };
     PloneapiService.prototype.getRegistry = function () {
         var url = this.base_url() + '/' + REGISTRY_ENDPOINT;
@@ -50407,6 +50419,8 @@ var BrowserComponent = (function () {
         this.current_path = id;
         this.api.getObject(this.current_path)
             .subscribe(function (res) { return _this.result = res.json(); }, function (err) { return console.log(err); });
+        this.api.getSharing(this.current_path)
+            .subscribe(function (res) { return _this.sharing = res.json(); }, function (err) { return console.log(err); });
     };
     BrowserComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["F" /* Component */])({
@@ -76358,7 +76372,7 @@ module.exports = "<md-sidenav-layout  fullscreen>\n  <md-sidenav #start>\n    <m
 /* 799 */
 /***/ function(module, exports) {
 
-module.exports = "<md-card>\n   <md-card-title>Metadata</md-card-title>\n   <md-card-content *ngIf=\"result\">\n     <md-grid-list cols=\"2\" rowHeight=\"40px\">\n        <md-grid-tile> Modified - {{result.modified}}</md-grid-tile>\n        <md-grid-tile> Created - {{result.created}}</md-grid-tile>\n        <md-grid-tile> Type - {{result['@type']}}</md-grid-tile>\n        <md-grid-tile> ID - {{result['id']}}</md-grid-tile>\n        <md-grid-tile> PATH - {{current_path}}</md-grid-tile>\n        <md-grid-tile> UID - {{result['UID']}}</md-grid-tile>\n        <md-grid-tile> @id - {{result['@id']}}</md-grid-tile>\n        <md-grid-tile (click)=\"load(result['parent']['@id'])\"> parent - {{result['parent']['@id']}}</md-grid-tile>\n      </md-grid-list>\n   </md-card-content>\n </md-card>\n<md-card>\n   <md-card-title>List of content</md-card-title>\n   <md-card-content>\n     <md-grid-list *ngIf=\"result\" [cols]=\"fixedCols\" [rowHeight]=\"fixedRowHeight\">\n       <md-grid-tile *ngFor=\"let tile of result.items\" colspan=\"4\" rowspan=\"1\"\n                     [style.background]=\"even ? 'lightblue' : 'lightgreen'\" (click)=\"load(tile['@id'])\">\n         {{tile['@id']}}\n       </md-grid-tile>\n     </md-grid-list>\n   </md-card-content>\n </md-card>\n"
+module.exports = "<md-card>\n   <md-card-title>Metadata</md-card-title>\n   <md-card-content *ngIf=\"result\">\n     <md-grid-list cols=\"2\" rowHeight=\"40px\">\n        <md-grid-tile> Modified - {{result.modified}}</md-grid-tile>\n        <md-grid-tile> Created - {{result.created}}</md-grid-tile>\n        <md-grid-tile> Type - {{result['@type']}}</md-grid-tile>\n        <md-grid-tile> ID - {{result['id']}}</md-grid-tile>\n        <md-grid-tile> PATH - {{current_path}}</md-grid-tile>\n        <md-grid-tile> UID - {{result['UID']}}</md-grid-tile>\n        <md-grid-tile> @id - {{result['@id']}}</md-grid-tile>\n        <md-grid-tile (click)=\"load(result['parent']['@id'])\"> parent - {{result['parent']['@id']}}</md-grid-tile>\n      </md-grid-list>\n   </md-card-content>\n </md-card>\n <md-card>\n    <md-card-title>Sharing Inherit</md-card-title>\n    <md-card-content *ngIf=\"sharing\">\n      <ul *ngFor=\"let group of sharing.inherit\">\n        <li><h3>{{group['@id']}}</h3></li>\n        <li>Role Permission\n          <ul>\n            <li *ngFor=\"let roles of group.role_permission | maptoiterable\">{{roles.key}} -\n              <ul>\n                <li *ngFor=\"let p of roles.value | maptoiterable\">{{p.key}} - {{p.value}}</li>\n              </ul>\n            </li>\n          </ul>\n        </li>\n        <li>Principal Permission\n          <ul>\n            <li *ngFor=\"let roles of group.principal_permission | maptoiterable\">{{roles.key}} -\n              <ul>\n                <li *ngFor=\"let p of roles.value | maptoiterable\">{{p.key}} - {{p.value}}</li>\n              </ul>\n            </li>\n          </ul>\n        </li>\n        <li>Principal Role\n          <ul>\n            <li *ngFor=\"let roles of group.principal_role | maptoiterable\">{{roles.key}} -\n              <ul>\n                <li *ngFor=\"let p of roles.value | maptoiterable\">{{p.key}} - {{p.value}}</li>\n              </ul>\n            </li>\n          </ul>\n        </li>\n      </ul>\n    </md-card-content>\n  </md-card>\n  <md-card>\n     <md-card-title>Sharing Local</md-card-title>\n     <md-card-content *ngIf=\"sharing\">\n         <ul *ngFor=\"let permission of sharing.local | maptoiterable\">\n\n           <li><h3>{{permission.key}}</h3></li>\n           <ul>\n             <li *ngFor=\"let roles of permission.value | maptoiterable\">{{roles.key}} -\n               <ul>\n                 <li *ngFor=\"let p of roles.value | maptoiterable\">{{p.key}} - {{p.value}}</li>\n               </ul>\n             </li>\n           </ul>\n         </ul>\n     </md-card-content>\n   </md-card>\n<md-card>\n   <md-card-title>List of content</md-card-title>\n   <md-card-content>\n     <md-grid-list *ngIf=\"result\" [cols]=\"fixedCols\" [rowHeight]=\"fixedRowHeight\">\n       <md-grid-tile *ngFor=\"let tile of result.items\" colspan=\"4\" rowspan=\"1\"\n                     [style.background]=\"even ? 'lightblue' : 'lightgreen'\" (click)=\"load(tile['@id'])\">\n         {{tile['@id']}}\n       </md-grid-tile>\n     </md-grid-list>\n   </md-card-content>\n </md-card>\n"
 
 /***/ },
 /* 800 */

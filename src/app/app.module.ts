@@ -11,12 +11,18 @@ import { ConfigurationService } from './configuration.service';
 import { PLONEMANAGER_ROUTES } from './routes';
 import { SitedefinitionComponent } from './sitedefinition/sitedefinition.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { BrowserComponent } from './browser/browser.component';
+import { BrowserComponent, CreateDialogComponent } from './browser/browser.component';
 import { RegistryComponent } from './registry/registry.component';
 import { TypesComponent } from './types/types.component';
 import { MdIconRegistry } from '@angular/material';
 import { PloneapiService } from './ploneapi.service';
 import { MaptoiterablePipe } from './maptoiterable.pipe';
+
+import {
+  SchemaFormModule,
+  WidgetRegistry,
+  DefaultWidgetRegistry
+} from 'angular2-schema-form';
 
 
 @NgModule({
@@ -27,6 +33,7 @@ import { MaptoiterablePipe } from './maptoiterable.pipe';
     BrowserComponent,
     RegistryComponent,
     TypesComponent,
+    CreateDialogComponent,
     MaptoiterablePipe
   ],
   imports: [
@@ -35,14 +42,17 @@ import { MaptoiterablePipe } from './maptoiterable.pipe';
     HttpModule,
     RouterModule.forRoot(PLONEMANAGER_ROUTES),
     MaterialModule.forRoot(),
+    SchemaFormModule
   ],
   providers: [
     ConfigurationService,
     MdIconRegistry,
-    PloneapiService
+    PloneapiService,
+    {provide: WidgetRegistry, useClass: DefaultWidgetRegistry}
   ],
   entryComponents: [
-    AppComponent
+    AppComponent,
+    CreateDialogComponent
   ],
 })
 export class AppModule {

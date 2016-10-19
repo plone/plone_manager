@@ -4,6 +4,7 @@ import { ConfigurationService } from './configuration.service';
 
 const REGISTRY_ENDPOINT = '@registry';
 const TYPES_ENDPOINT = '@types';
+const SHARING_ENTRYPOINT = '@sharing';
 
 @Injectable()
 export class PloneapiService {
@@ -73,6 +74,34 @@ export class PloneapiService {
     return this.post(url, data);
   }
 
+  createObject(current_path: string, type: string, model: any) {
+    let url = '';
+    if (current_path.startsWith('http')) {
+      url = current_path;
+    } else {
+      url = this.base_url() + current_path;
+    }
+    // let data = JSON.stringify({
+    //   '@type': type,
+    //   'title': name,
+    //   'id': id
+    // });
+    model['@type'] = type;
+    let data = JSON.stringify(model);
+    return this.post(url, data);
+  }
+
+  getSharing(curr_path: string) {
+    let url = '';
+    if (curr_path.startsWith('http')) {
+      url = curr_path;
+    } else {
+      url = this.base_url() + curr_path;
+    }
+    url = url + '/' + SHARING_ENTRYPOINT;
+    return this.get(url);
+  }
+
   getRegistry() {
     let url = this.base_url() + '/' + REGISTRY_ENDPOINT;
     return this.get(url);
@@ -80,6 +109,11 @@ export class PloneapiService {
 
   getTypes() {
     let url = this.base_url() + '/' + TYPES_ENDPOINT;
+    return this.get(url);
+  }
+
+  getSchema(type) {
+    let url = this.base_url() + '/' + TYPES_ENDPOINT + '/' + type;
     return this.get(url);
   }
 

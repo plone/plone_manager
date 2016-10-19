@@ -13,6 +13,66 @@
       </md-grid-list>
    </md-card-content>
  </md-card>
+ <md-card>
+  <md-card-title>Create</md-card-title>
+  <md-card-content>
+    <md-grid-list cols="2" rowHeight="40px">
+      <md-grid-tile>
+        <button md-button (click)="createDocument()">Document</button>
+      </md-grid-tile>
+    </md-grid-list>
+  </md-card-content>
+ <md-card>
+    <md-card-title>Sharing Inherit</md-card-title>
+    <md-card-content *ngIf="sharing">
+      <ul *ngFor="let group of sharing.inherit">
+        <li><h3>{{group['@id']}}</h3></li>
+        <li>Role Permission
+          <ul>
+            <li *ngFor="let roles of group.role_permission | maptoiterable">{{roles.key}} -
+              <ul>
+                <li *ngFor="let p of roles.value | maptoiterable">{{p.key}} - {{p.value}}</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>Principal Permission
+          <ul>
+            <li *ngFor="let roles of group.principal_permission | maptoiterable">{{roles.key}} -
+              <ul>
+                <li *ngFor="let p of roles.value | maptoiterable">{{p.key}} - {{p.value}}</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>Principal Role
+          <ul>
+            <li *ngFor="let roles of group.principal_role | maptoiterable">{{roles.key}} -
+              <ul>
+                <li *ngFor="let p of roles.value | maptoiterable">{{p.key}} - {{p.value}}</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </md-card-content>
+  </md-card>
+  <md-card>
+     <md-card-title>Sharing Local</md-card-title>
+     <md-card-content *ngIf="sharing">
+         <ul *ngFor="let permission of sharing.local | maptoiterable">
+
+           <li><h3>{{permission.key}}</h3></li>
+           <ul>
+             <li *ngFor="let roles of permission.value | maptoiterable">{{roles.key}} -
+               <ul>
+                 <li *ngFor="let p of roles.value | maptoiterable">{{p.key}} - {{p.value}}</li>
+               </ul>
+             </li>
+           </ul>
+         </ul>
+     </md-card-content>
+   </md-card>
 <md-card>
    <md-card-title>List of content</md-card-title>
    <md-card-content>
